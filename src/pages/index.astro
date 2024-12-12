@@ -1,0 +1,251 @@
+---
+import { getCollection } from 'astro:content';
+
+// Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Component Imports
+import CallToAction from '../components/CallToAction.astro';
+import Grid from '../components/Grid.astro';
+import Hero from '../components/Hero.astro';
+import Icon from '../components/Icon.astro';
+import Pill from '../components/Pill.astro';
+import PortfolioPreview from '../components/PortfolioPreview.astro';
+
+// Page section components
+import ContactCTA from '../components/ContactCTA.astro';
+import Skills from '../components/Skills.astro';
+
+// Content Fetching: List four most recent work projects
+const projects = (await getCollection('work'))
+	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+	.slice(0, 4);
+
+// Full Astro Component Syntax:
+// https://docs.astro.build/basics/astro-components/
+---
+
+<BaseLayout>
+	<div class="stack gap-20 lg:gap-48">
+		<div class="wrapper stack gap-8 lg:gap-20">
+			<header class="hero">
+				<Hero
+					title="Hello, my name is RadixCTO"
+					tagline="CTO is a Community Take Over cultural and Degen Stuff. And we are the Sarcastic and Degen voice of Radix Community."
+					align="start"
+				>
+					<div class="roles">
+						<Pill url="https://ociswap.com/resource_rdx1t4t26wh39qxydm5lhfcelstyrh0kr9dtcn6x2nsf37wjjrlj95j9ms"><Icon icon="cart" size="1.33em" />BUY  Ociswap</Pill>
+						<Pill url="https://astrolescent.com/token/resource_rdx1t4t26wh39qxydm5lhfcelstyrh0kr9dtcn6x2nsf37wjjrlj95j9ms?from=resource_rdx1thrvr3xfs2tarm2dl9emvs26vjqxu6mqvfgvqjne940jv0lnrrg7rw&amount=1000"><Icon icon="cart-simple" size="1.33em" />BUY Astrolescent</Pill>
+						<Pill url="https://radix.defiplaza.net/token/resource_rdx1t4t26wh39qxydm5lhfcelstyrh0kr9dtcn6x2nsf37wjjrlj95j9ms/staking"><Icon icon="pig" size="1.33em" />STAKE $CTO</Pill>
+					</div>
+				</Hero>
+
+				<img
+					alt="RadixCTO is a Sarcastic and Degen voice"
+					width="480"
+					height="620"
+					src="/assets/radix-cto.jpg"
+				/>
+			</header>
+
+			<Skills />
+		</div>
+
+		<main class="wrapper stack gap-20 lg:gap-48">
+			<section class="section with-background with-cta">
+				<header class="section-header stack gap-2 lg:gap-4">
+					<h3>The CTO isn’t just a title—it’s an attitude</h3>
+					<p>A bold, unapologetic voice of reason (and sarcasm) in the blockchain world, here to remind other networks that mediocrity isn’t tolerated. With sharp wit and playful jabs, the CTO calls out inefficiencies, pokes fun at overhyped 'solutions,' and shines a spotlight on Radix as the real deal. It’s not aggression; it’s just confidence with a megaphone. Radix doesn’t just compete—it outclasses, and the CTO makes sure everyone knows it. 🚀</p>
+				</header>
+
+				<div class="gallery">
+					<Grid variant="offset">
+						{
+							projects.map((project) => (
+								<li>
+									<PortfolioPreview project={project} />
+								</li>
+							))
+						}
+					</Grid>
+				</div>
+
+				<div class="cta">
+					<CallToAction href="/work/">
+						View All
+						<Icon icon="arrow-right" size="1.2em" />
+					</CallToAction>
+				</div>
+			</section>
+
+			<section class="section with-background bg-variant">
+				<header class="section-header stack gap-2 lg:gap-4">
+					<h3>Friends</h3>
+					<p>
+						This Radix projects has been so helpful in our journey:
+					</p>
+				</header>
+
+				<div class="gallery">
+					<Grid variant="small">
+						{
+							['@FOMOXRD', '@addix_xrd', '@Hug_Radix', '@EARLY_Radix', '@DANcoinXRD','@wowoproject_xrd'].map((brand) => (
+								<li class="mention-card">
+									<p>{brand}</p>
+								</li>
+							))
+						}
+					</Grid>
+				</div>
+			</section>
+		</main>
+
+		<ContactCTA />
+	</div>
+</BaseLayout>
+
+<style>
+	.hero {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 2rem;
+	}
+
+	.roles {
+		display: none;
+	}
+
+	.hero img {
+		aspect-ratio: 5 / 4;
+		object-fit: cover;
+		object-position: top;
+		border-radius: 1.5rem;
+		box-shadow: var(--shadow-md);
+	}
+
+	@media (min-width: 50em) {
+		.hero {
+			display: grid;
+			grid-template-columns: 6fr 4fr;
+			padding-inline: 2.5rem;
+			gap: 3.75rem;
+		}
+
+		.roles {
+			margin-top: 0.5rem;
+			display: flex;
+			gap: 0.5rem;
+		}
+
+		.hero img {
+			aspect-ratio: 3 / 4;
+			border-radius: 4.5rem;
+			object-fit: cover;
+		}
+	}
+
+	/* ====================================================== */
+
+	.section {
+		display: grid;
+		gap: 2rem;
+	}
+
+	.with-background {
+		position: relative;
+	}
+
+	.with-background::before {
+		--hero-bg: var(--bg-image-subtle-2);
+
+		content: '';
+		position: absolute;
+		pointer-events: none;
+		left: 50%;
+		width: 100vw;
+		aspect-ratio: calc(2.25 / var(--bg-scale));
+		top: 0;
+		transform: translateY(-75%) translateX(-50%);
+		background:
+			url('/assets/backgrounds/noise.png') top center/220px repeat,
+			var(--hero-bg) center center / var(--bg-gradient-size) no-repeat,
+			var(--gray-999);
+		background-blend-mode: overlay, normal, normal, normal;
+		mix-blend-mode: var(--bg-blend-mode);
+		z-index: -1;
+	}
+
+	.with-background.bg-variant::before {
+		--hero-bg: var(--bg-image-subtle-1);
+	}
+
+	.section-header {
+		justify-self: center;
+		text-align: center;
+		max-width: 50ch;
+		font-size: var(--text-md);
+		color: var(--gray-300);
+	}
+
+	.section-header h3 {
+		font-size: var(--text-2xl);
+	}
+
+	@media (min-width: 50em) {
+		.section {
+			grid-template-columns: repeat(4, 1fr);
+			grid-template-areas: 'header header header header' 'gallery gallery gallery gallery';
+			gap: 5rem;
+		}
+
+		.section.with-cta {
+			grid-template-areas: 'header header header cta' 'gallery gallery gallery gallery';
+		}
+
+		.section-header {
+			grid-area: header;
+			font-size: var(--text-lg);
+		}
+
+		.section-header h3 {
+			font-size: var(--text-4xl);
+		}
+
+		.with-cta .section-header {
+			justify-self: flex-start;
+			text-align: left;
+		}
+
+		.gallery {
+			grid-area: gallery;
+		}
+
+		.cta {
+			grid-area: cta;
+		}
+	}
+
+	/* ====================================================== */
+
+	.mention-card {
+		display: flex;
+		height: 7rem;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		border: 1px solid var(--gray-800);
+		border-radius: 1.5rem;
+		color: var(--gray-300);
+		background: var(--gradient-subtle);
+		box-shadow: var(--shadow-sm);
+	}
+
+	@media (min-width: 50em) {
+		.mention-card {
+			border-radius: 1.5rem;
+			height: 9.5rem;
+		}
+	}
+</style>

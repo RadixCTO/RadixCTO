@@ -10,7 +10,8 @@ import Grid from '../components/Grid.astro';
 import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
 import Pill from '../components/Pill.astro';
-import PortfolioPreview from '../components/PortfolioPreview.astro';
+import PortfolioPreview from '../components/PortfolioPreviewX.astro';
+import Video from '../components/Video.astro';
 
 // Page section components
 import ContactCTA from '../components/ContactCTA.astro';
@@ -23,6 +24,9 @@ const projects = (await getCollection('work'))
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
+
+import dataX from '../content/data_x.js';
+
 ---
 
 <BaseLayout>
@@ -62,7 +66,7 @@ const projects = (await getCollection('work'))
 				<div class="gallery">
 					<Grid variant="offset">
 						{
-							projects.map((project) => (
+							dataX.map((project) => (
 								<li>
 									<PortfolioPreview project={project} />
 								</li>
@@ -72,8 +76,8 @@ const projects = (await getCollection('work'))
 				</div>
 
 				<div class="cta">
-					<CallToAction href="/nfts/">
-						NFT's
+					<CallToAction href="https://x.com/RadixCTO">
+						Follow Me
 						<Icon icon="arrow-right" size="1.2em" />
 					</CallToAction>
 				</div>
@@ -99,6 +103,7 @@ const projects = (await getCollection('work'))
 					</Grid>
 				</div>
 			</section>
+			<Video></Video>
 		</main>
 
 		<ContactCTA />
